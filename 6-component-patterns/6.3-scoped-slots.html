@@ -1,0 +1,34 @@
+<script src="../node_modules/vue/dist/vue.js"></script>
+
+<div id="app">
+  <my-awesome-list>
+    <template slot-scope="{ item, msg }">
+      <div class="item">{{ item }}</div>
+      <span>{{ msg }}</span>
+    </template>
+  </my-awesome-list>
+</div>
+
+<script>
+const MyAwesomeList = {
+  data: () => ({
+    list: [
+      { text: 'Hello' }
+    ]
+  }),
+  template: `
+    <ul>
+      <li v-for="item in list">
+        <slot :item="item" msg="hello" />
+      </li>
+    </ul>
+  `
+}
+
+new Vue({
+  el: '#app',
+  components: {
+    MyAwesomeList
+  }
+})
+</script>

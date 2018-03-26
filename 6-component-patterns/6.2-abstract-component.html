@@ -1,0 +1,58 @@
+<script src="../node_modules/vue/dist/vue.js"></script>
+
+<div id="app">
+  <error-boundary>
+    <foo></foo>
+  </error-boundary>
+</div>
+
+<script>
+Vue.component('abstract', {
+  render (h) {
+    const vnode = this.$slots.default[0]
+    if (!vnode.data) vnode.data = {}
+    vnode.data.style = { color: 'red' }
+    return vnode
+  }
+})
+
+Vue.component('ErrorBoundary', {
+  props: {}
+  data () {
+    return {
+      error: null
+    }
+  },
+  errorCaptured (err, vm, info) {
+    this.error = err.message
+    return false
+  },
+  render (h) {
+    if (this.error) {
+      return h(
+        'div',
+        { style: { color: 'red' }},
+        `error from children: ${this.error}`
+      )
+    }
+    return this.$slots.default[0]
+  }
+})
+
+Vue.component('foo', {
+  created () {
+
+  },
+  render (h) {
+    throw new Error('oops')
+    return h('div', 'hello from foo')
+  }
+})
+
+new Vue({
+  el: '#app',
+  data: {
+    ok: true
+  }
+})
+</script>
